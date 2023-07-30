@@ -210,7 +210,7 @@ if __name__ == '__main__':
     results_dict = {'dataset': [], 'n': [], 'RMSE': [], 'syn_RMSE': [], 'R2': [],
                     'syn_R2': []}  # 'precision': [], 'recall': [], 'accuracy': []}
 
-    ucs = ['crop yield']
+    ucs = ['house']
     for use_case in ucs:
         data, discrete_columns, label = import_n_setup(use_case)
         print(data.shape[0])
@@ -232,8 +232,8 @@ if __name__ == '__main__':
         train_data[label] = y_train
         metadata = SingleTableMetadata()
         metadata.detect_from_dataframe(data=data)
-        epochs = 150
-        batch_size = 2000 if use_case == 'house' else 100
+        epochs = 50
+        batch_size = 1000 if use_case == 'house' else 100
         ctgan_model = train_generator(train_data, metadata, discrete_columns, epochs, batch_size, X_test, y_test,
                                       label)  # TODO: added, X_test set, y_test set and label column name
         syn_sample_size = X_train.shape[0] #if ucs == 'heart' else X_train.shape[0] // 2
@@ -253,6 +253,7 @@ if __name__ == '__main__':
         results_dict['syn_RMSE'].append(math.pow(syn_MSE,0.5))
         results_dict['syn_R2'].append(syn_ev)
         df = pd.DataFrame(results_dict)
-    df.to_csv('results_yieldfull_3007.csv')
+    df.to_csv('results_house_feedback3007'
+              '.csv')
 
 
