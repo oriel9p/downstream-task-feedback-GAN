@@ -106,11 +106,13 @@ def import_n_setup(use_case):
         discrete_columns = ['Sex','ChestPainType','RestingECG',
                             'ExerciseAngina','ST_Slope','HeartDisease']
         label = 'HeartDisease'
+        type = 'binary classification'
     elif use_case=='adult':
         data = pd.read_csv('datasets/adults_concesus_income.csv')
         discrete_columns = ['workclass','education','marital-status',
                             'occupation','relationship','race','sex','native-country', 'Target']
         label = 'target'
+        type = 'binary classification'
     elif use_case=='students':
         data = pd.read_csv('datasets/students_dropout.csv')
         discrete_columns = ['Marital status', 'Application order', 'Attendance',
@@ -118,14 +120,17 @@ def import_n_setup(use_case):
                             'Mom Occupation', 'Dad Occupation', 'Educational special needs','Debtor','Gender',
                             'Scholarship holder', 'Target']
         label = 'Target'
+        type = 'binary classification'
     elif use_case=='crop yield':
         data = pd.read_csv('datasets/crop_yield.csv')
         discrete_columns = ['Year','Item','Area']
         label = 'hg/ha_yield'
+        type = 'regression'
     elif use_case == 'fraud':
         data = pd.read_csv('datasets/cc_frauds.csv')
         discrete_columns = ['Class']
         label = 'Class'
+        type = 'binary classification'
         # Under sample for size and prevalence
         rus = RandomUnderSampler(random_state=42, sampling_strategy=0.05)
         cols = data.columns
@@ -137,11 +142,13 @@ def import_n_setup(use_case):
         data = pd.read_csv('datasets/news_proper_data.csv')
         discrete_columns = ['publish_day','data_channel']
         label = 'shares'
+        type = 'regression'
     elif use_case == 'house':
         data = pd.read_csv('datasets/housr_price.csv')
         discrete_columns = ['ocean_proximity']
         label = 'median_house_value'
         data = data.dropna(axis=1)
+        type = 'regression'
     else:
         ValueError('No such dataset available')
         return None
@@ -150,6 +157,7 @@ def import_n_setup(use_case):
 if __name__ == '__main__':
     # check for GPU
     print(torch.cuda.is_available())
+    # Binary classification
     # results_dict = {'dataset': [], 'n': [], 'accuracy': [], 'syn_accuracy': [], 'f1': [],
     #                 'syn_f1': []}  # 'precision': [], 'recall': [], 'accuracy': []}
     #
@@ -197,12 +205,12 @@ if __name__ == '__main__':
     #     df = pd.DataFrame(results_dict)
     # df.to_csv('results_news_2307_feedback.csv')
 
-    # regression run
+    # Regression
 
     results_dict = {'dataset': [], 'n': [], 'RMSE': [], 'syn_RMSE': [], 'R2': [],
                     'syn_R2': []}  # 'precision': [], 'recall': [], 'accuracy': []}
 
-    ucs = ['house']
+    ucs = ['crop yield']
     for use_case in ucs:
         data, discrete_columns, label = import_n_setup(use_case)
         print(data.shape[0])
